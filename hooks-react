@@ -69,3 +69,68 @@ function App() {
 }
 
 export default App;
+
+import { useReducer } from "react";
+
+const initialState = [
+  { id: 1, text: "Study React", hidden: false },
+  { id: 2, text: "Practice Hooks", hidden: false }
+];
+
+function reducer(state, action) {
+
+  switch(action.type) {
+
+    case "toggle":
+
+      return state.map((task) =>
+
+        task.id === action.payload
+
+          ? { ...task, hidden: !task.hidden }
+
+          : task
+      );
+
+    default:
+      return state;
+  }
+}
+
+function App() {
+
+  const [tasks, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+
+      <h1>Task List</h1>
+
+      {tasks.map((task) => (
+
+        <div key={task.id}>
+
+          <p>
+            {task.hidden ? "Content Hidden" : task.text}
+          </p>
+
+          <button
+            onClick={() =>
+              dispatch({
+                type: "toggle",
+                payload: task.id
+              })
+            }
+          >
+            Toggle
+          </button>
+
+        </div>
+
+      ))}
+
+    </div>
+  );
+}
+
+export default App;
